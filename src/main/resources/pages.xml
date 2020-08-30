@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages>
+    <page name="home" title="PHPTRAVELS | Travel Technology Partner" url="https://www.phptravels.net/home"/>
+    <page name="user" title="My Account" url="https://www.phptravels.net/login">
+        <username>user@phptravels.com</username>
+        <password>demouser</password>
+    </page>
+    <page name="admin" title="Administator Login" url="https://www.phptravels.net/admin">
+        <email>admin@phptravels.com</email>
+        <password>demoadmin</password>
+    </page>
+</pages>
