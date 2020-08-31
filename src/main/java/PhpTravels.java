@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -6,10 +7,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
@@ -19,16 +17,8 @@ import org.slf4j.LoggerFactory;
 public class PhpTravels {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    private HashMap<String, String> adminParamHashMap = new HashMap<>();
-    private HashMap<String, String> userParamHashMap = new HashMap<>();
-    private HashMap<String, String> languages = new HashMap<>();
 
-    //    private String homeUrl = "https://www.phptravels.net/home";
-    private String homeUrl = "https://www.phptravels.org/";
-    private String userUrl = "https://www.phptravels.net/login";
-    private String adminUrl = "https://www.phptravels.net/admin";
-
-    private HashMap params;
+    private HashMap<String, String> params;
     private String url;
     private WebDriver driver;
     String webDriverUrl = "http://localhost:4444/wd/hub";
@@ -52,13 +42,10 @@ public class PhpTravels {
         } catch (MalformedURLException e) {
             logger.error(e.getMessage());
         }
+        driver.manage().window().maximize();
         logger.info(browserName);
         wait = new WebDriverWait(driver, 10);
 
-        adminParamHashMap.put("email", "admin@phptravels.com");
-        adminParamHashMap.put("password", "demoadmin");
-        userParamHashMap.put("username", "user@phptravels.com");
-        userParamHashMap.put("password", "demouser");
     }
 
     public String getTitle() {
@@ -76,36 +63,18 @@ public class PhpTravels {
         return this;
     }
 
-    public PhpTravels linkToHomePage() {
-        setUrl(homeUrl);
-        link();
-        return this;
-    }
-
     public PhpTravels login() {
         link();
 
         params.forEach((k, v) -> driver.findElement(By.name(k.toString())).sendKeys(v.toString()));
         driver.findElement(By.xpath("//form/button")).click();
-
-        wait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(),'Logout')]")));
-
+        try {
+            wait.until(ExpectedConditions
+                    .presenceOfElementLocated(By.xpath("//*[contains(text(),'Logout')]")));
+        } catch (TimeoutException e) {
+            logger.error(e.getMessage());
+        }
         logger.info("-->" + driver.getTitle());
-        return this;
-    }
-
-    public PhpTravels loginByAdmin() {
-        setUrl(adminUrl);
-        setParams(adminParamHashMap);
-        login();
-        return this;
-    }
-
-    public PhpTravels loginByUser() {
-        setUrl(userUrl);
-        setParams(userParamHashMap);
-        login();
         return this;
     }
 
@@ -115,12 +84,8 @@ public class PhpTravels {
         for (WebElement link : driver.findElements(By.tagName("a"))) {
             url = link.getAttribute("href");
 
-//            if (isValidUrl(url)) {
-//                if (url.contains("mailto:")) {
-//                    continue;
-//                }
-                links.add(url);
-//            }
+            links.add(url);
+
         }
         return links;
     }
@@ -144,61 +109,6 @@ public class PhpTravels {
 
     public WebDriver getDriver() {
         return driver;
-    }
-
-
-    public boolean checkLink(WebElement link) {
-
-        String url = "";
-        HttpURLConnection huc = null;
-        int respCode = 200;
-
-        url = link.getAttribute("href");
-        String textAndUrl = "id: " + link.getAttribute("id") + " class: " + link.getAttribute("class") +
-                " text: " + link.getText() + " URL: " + url;
-        logger.info(textAndUrl);
-        try {
-
-            huc = (HttpURLConnection) (new URL(url).openConnection());
-            huc.setRequestMethod("HEAD");
-            huc.connect();
-            respCode = huc.getResponseCode();
-            if (respCode >= 400) {
-                System.out.println(" - URL не отвечает");
-                return false;
-            }
-            System.out.println();
-        } catch (MalformedURLException e) {
-            logger.error(e.getMessage());
-            return false;
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-//    public boolean checkAllLinks() {
-//
-//        boolean checkResult = true;
-//        for (WebElement link : getAllLinks()) {
-//            //checkResult = checkResult && checkLink(link);
-//            checkLink(link);
-//        }
-//        return checkResult;
-//    }
-
-    public static boolean isValidUrl(String url) {
-        try {
-            new URL(url).toURI();
-            return true;
-        } catch (MalformedURLException e) {
-            if (e.getMessage() == "unknown protocol: javascript" | e.getMessage() == "null") {
-                return false;
-            }
-        } catch (URISyntaxException e) {
-        }
-        return true;
     }
 
     public PhpTravels close() {

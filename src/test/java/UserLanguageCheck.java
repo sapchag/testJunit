@@ -13,11 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spec.ParametersXml;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class HomeLanguageCheck {
+public class UserLanguageCheck {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     PhpTravels phpTravels;
@@ -25,11 +25,12 @@ public class HomeLanguageCheck {
     @BeforeAll
     void initAll() {
         phpTravels = new PhpTravels()
-                .setUrl(ParametersXml.getUrl("home"))
-                .link();
+                .setUrl(ParametersXml.getUrl("user"))
+                .setParams(ParametersXml.getPageParameters("user"))
+                .login();
 
         checkTitleStep(phpTravels.getCurrentUrl(), phpTravels.getTitle(),
-                ParametersXml.getTitle("home"));
+                ParametersXml.getTitle("user"));
     }
 
     @AfterAll
@@ -39,7 +40,7 @@ public class HomeLanguageCheck {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Смена языка на главной странице")
+    @DisplayName("Смена языка на странице пользователя")
     void checkLanguage(String alias, String control) {
         phpTravels.swithLanguage(alias);
         String findString = "//a[contains(@href, 'https://www.phptravels.net/supplier-register/')]";

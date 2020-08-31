@@ -14,14 +14,13 @@ import javax.xml.stream.events.XMLEvent;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Properties;
 
-public class XmlReader {
+public class ParametersXml {
 
-    static final String path = "src/main/resources/properties.xml";
-    static final Logger logger = LoggerFactory.getLogger(XmlReader.class);
+    static final String path = "src/main/resources/PhpTravelConfig.xml";
+    static final Logger logger = LoggerFactory.getLogger(ParametersXml.class);
 
-    public static HashMap getNode(String nodeName, String nameAttributeValue) {
+    public static HashMap getNodeValues(String nodeName, String... attributeParams) {
 
         HashMap<String, String> hMap = new HashMap<String, String>();
         try {
@@ -34,55 +33,64 @@ public class XmlReader {
             boolean nodeIsFound = false;
             while (eventReader.hasNext()) {
                 XMLEvent event = eventReader.nextEvent();
-                System.out.println(event.getEventType());
-
+                HashMap<String, String> attributesMap = new HashMap<String, String>();
                 switch (event.getEventType()) {
                     case XMLStreamConstants.START_ELEMENT:
                         startElement = event.asStartElement();
                         String elementName = startElement.getName().getLocalPart();
                         if (nodeIsFound) {
-                            System.out.println(elementName);
                             mapKeyValue = elementName;
                         }
                         if (elementName.equalsIgnoreCase(nodeName)) {
-                            if (nameAttributeValue == null) {
+                            if (attributeParams.length == 0) {
                                 nodeIsFound = true;
                             } else {
-                                System.out.println(nodeName);
                                 Iterator<Attribute> attributes = startElement.getAttributes();
                                 while (attributes.hasNext()) {
                                     attribute = attributes.next();
-                                    System.out.println(attribute.getValue());
-                                    if (attribute.getName().getLocalPart().equalsIgnoreCase("name") &&
-                                            attribute.getValue().equalsIgnoreCase(nameAttributeValue)) {
+                                    attributesMap.put(attribute.getName().getLocalPart(), attribute.getValue());
+                                }
+                                if (attributesMap.get("name").contains(attributeParams[0])) {
+                                    if (attributeParams.length < 2) {
                                         nodeIsFound = true;
-                                        System.out.println("true");
+                                    } else {
+                                        hMap.put(attributeParams[1], attributesMap.get(attributeParams[1]));
+                                        return hMap;
                                     }
                                 }
+                                attributesMap.clear();
                             }
                         }
                         break;
                     case XMLStreamConstants.CHARACTERS:
                         Characters characters = event.asCharacters();
                         if (!characters.getData().trim().isEmpty() && nodeIsFound) {
-                            System.out.println(characters.getData());
                             hMap.put(mapKeyValue, characters.getData());
                         }
                         break;
                     case XMLStreamConstants.END_ELEMENT:
                         if (event.asEndElement().getName().getLocalPart() == nodeName) {
                             nodeIsFound = false;
-                            System.out.println("false");
                         }
                 }
             }
         } catch (XMLStreamException | FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println(hMap);
         return hMap;
     }
+
+    public static HashMap getPageParameters(String pageName) {
+        return getNodeValues("page", pageName);
+    }
+
+    public static String getTitle(String pageName) {
+        return getNodeValues("page", pageName, "title")
+                .get("title").toString();
+    }
+
+    public static String getUrl(String pageName) {
+        return getNodeValues("page", pageName, "url")
+                .get("url").toString();
+    }
 }
-
-
-

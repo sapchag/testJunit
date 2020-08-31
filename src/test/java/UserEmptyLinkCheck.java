@@ -5,18 +5,19 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spec.UrlChecks;
 import spec.ParametersXml;
+import spec.UrlChecks;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-public class HomeEmptyLinkCheck {
+public class UserEmptyLinkCheck {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Отсутвие пустых ссылок на главной странице")
+    @DisplayName("Отсутвие пустых ссылок на странице пользователя")
     void checkLink(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isChecked());
@@ -24,14 +25,15 @@ public class HomeEmptyLinkCheck {
 
     static Stream<String> checkLink() {
         PhpTravels phpTravels = new PhpTravels()
-                .setUrl(ParametersXml.getUrl("home"))
-                .link();
+                .setUrl(ParametersXml.getUrl("user"))
+                .setParams(ParametersXml.getPageParameters("user"))
+                .login();
 
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();
         List<String> links = phpTravels.getAllLinks();
         phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle("home"));
+        checkTitleStep(url, title, ParametersXml.getTitle("user"));
         return links.stream();
     }
 
