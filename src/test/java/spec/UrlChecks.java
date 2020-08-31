@@ -49,13 +49,13 @@ public class UrlChecks {
             huc.setRequestMethod("HEAD");
             huc.connect();
             respCode = huc.getResponseCode();
-            if (respCode >= 400) {
+            if (respCode == 404 || respCode == 500) {
                 message = String.valueOf(respCode);
             } else {
                 checked = true;
             }
 
-        } catch (IOException | ClassCastException e) {
+        } catch (IOException | ClassCastException | IllegalArgumentException e) {
             if (e.getMessage().contains("MailToURLConnection")) {
                 checked = isValidEmail(url.replace("mailto:", ""));
             } else {

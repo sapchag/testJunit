@@ -1,0 +1,6 @@
+2020-09-01 01:10:49,630 INFO [main] PhpTravels [PhpTravels.java:29] Выбор и запуск браузера
+2020-09-01 01:11:04,342 INFO [main] PhpTravels [PhpTravels.java:46] firefox
+2020-09-01 01:11:20,197 INFO [main] PhpTravels [PhpTravels.java:61] https://www.phptravels.net/admin
+2020-09-01 01:11:20,242 INFO [main] PhpTravels [PhpTravels.java:62]  >Administator Login
+2020-09-01 01:11:26,346 INFO [main] PhpTravels [PhpTravels.java:77] -->Dashboard
+2020-09-01 01:11:37,123 INFO [main] PhpTravels [PhpTravels.java:116] firefox закрыт

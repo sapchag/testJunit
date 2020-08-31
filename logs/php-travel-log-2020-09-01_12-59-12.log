@@ -1,0 +1,5 @@
+2020-09-01 00:59:16,897 INFO [main] PhpTravels [PhpTravels.java:29] Выбор и запуск браузера
+2020-09-01 00:59:26,923 INFO [main] PhpTravels [PhpTravels.java:46] chrome
+2020-09-01 00:59:41,128 INFO [main] PhpTravels [PhpTravels.java:61] https://www.phptravels.net/login
+2020-09-01 00:59:41,162 INFO [main] PhpTravels [PhpTravels.java:62]  >Login
+2020-09-01 00:59:41,355 INFO [main] PhpTravels [PhpTravels.java:116] chrome закрыт

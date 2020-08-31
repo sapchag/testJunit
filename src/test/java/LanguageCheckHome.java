@@ -1,4 +1,7 @@
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
+import io.qameta.allure.Story;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,7 +20,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class HomeLanguageCheck {
+public class LanguageCheckHome {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     PhpTravels phpTravels;
@@ -37,6 +40,9 @@ public class HomeLanguageCheck {
         phpTravels.close();
     }
 
+    @Epic(value = "Language")
+    @Feature(value = "Смена языка на главной странице")
+    @Story(value = "Домашняя")
     @ParameterizedTest(name = "{0}")
     @MethodSource
     @DisplayName("Смена языка на главной странице")

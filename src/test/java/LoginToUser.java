@@ -1,3 +1,6 @@
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -5,6 +8,9 @@ import spec.ParametersXml;
 
 public class LoginToUser {
 
+    @Epic(value = "Login")
+    @Feature(value = "Вход на страницу")
+    @Story(value = "Пользователь")
     @Test
     @DisplayName("Вход на старницу пользователя")
     void userLogin() {

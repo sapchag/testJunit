@@ -1,23 +1,29 @@
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
+import io.qameta.allure.Story;
 import org.junit.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spec.ParametersXml;
 import spec.UrlChecks;
+import spec.ParametersXml;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-public class UserEmptyLinkCheck {
+public class EmptyLinkCheckHome {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Epic(value = "Link")
+    @Feature(value = "Отсутвие пустых ссылок на странице")
+    @Story(value = "Домашняя")
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Отсутвие пустых ссылок на странице пользователя")
+    @DisplayName("Отсутвие пустых ссылок на главной странице")
     void checkLink(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isChecked());
@@ -25,15 +31,14 @@ public class UserEmptyLinkCheck {
 
     static Stream<String> checkLink() {
         PhpTravels phpTravels = new PhpTravels()
-                .setUrl(ParametersXml.getUrl("user"))
-                .setParams(ParametersXml.getPageParameters("user"))
-                .login();
+                .setUrl(ParametersXml.getUrl("home"))
+                .link();
 
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();
         List<String> links = phpTravels.getAllLinks();
         phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle("user"));
+        checkTitleStep(url, title, ParametersXml.getTitle("home"));
         return links.stream();
     }
 
