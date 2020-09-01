@@ -40,9 +40,9 @@ public class LanguageCheckHome {
         phpTravels.close();
     }
 
-    @Epic(value = "Language")
-    @Feature(value = "Смена языка на главной странице")
-    @Story(value = "Домашняя")
+    @Epic("Language")
+    @Feature("Смена языка на главной странице")
+    @Story("Домашняя")
     @ParameterizedTest(name = "{0}")
     @MethodSource
     @DisplayName("Смена языка на главной странице")

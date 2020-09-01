@@ -8,9 +8,9 @@ import spec.ParametersXml;
 
 public class LinkToAdmin {
 
-    @Epic(value = "Link")
-    @Feature(value = "Доступность старницы")
-    @Story(value = "Администратор")
+    @Epic("Link")
+    @Feature("Доступность старницы")
+    @Story("Администратор")
     @Test
     @DisplayName("Доступность старницы администратора")
     void linkToAdmin() {

@@ -8,9 +8,9 @@ import spec.ParametersXml;
 
 public class LoginToUser {
 
-    @Epic(value = "Login")
-    @Feature(value = "Вход на страницу")
-    @Story(value = "Пользователь")
+    @Epic("Login")
+    @Feature("Вход на страницу")
+    @Story("Пользователь")
     @Test
     @DisplayName("Вход на старницу пользователя")
     void userLogin() {

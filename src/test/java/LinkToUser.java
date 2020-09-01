@@ -10,10 +10,10 @@ import java.lang.reflect.Parameter;
 
 public class LinkToUser {
 
-    @Epic(value = "Link")
-    @Feature(value = "Доступность старницы")
-    @Story(value = "Пользователь")
     @Test
+    @Epic("Link")
+    @Feature("Доступность старницы")
+    @Story("Пользователь")
     @DisplayName("Доступность старницы пользователя")
     void linkToUser() {
         PhpTravels phpTravels = new PhpTravels();

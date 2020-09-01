@@ -18,9 +18,9 @@ public class EmptyLinkCheckUser {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Epic(value = "Link")
-    @Feature(value = "Отсутвие пустых ссылок на странице")
-    @Story(value = "Пользователь")
+    @Epic("Link")
+    @Feature("Отсутвие пустых ссылок на странице")
+    @Story("Пользователь")
     @ParameterizedTest(name = "{0}")
     @MethodSource
     @DisplayName("Отсутвие пустых ссылок на странице пользователя")

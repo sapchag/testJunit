@@ -80,7 +80,7 @@ public class ParametersXml {
         return hMap;
     }
 
-    public static HashMap getPageParameters(String pageName) {
+    public static HashMap<String, String> getPageParameters(String pageName) {
         return getNodeValues("page", pageName);
     }
 

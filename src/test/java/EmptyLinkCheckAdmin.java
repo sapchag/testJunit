@@ -14,13 +14,14 @@ import spec.UrlChecks;
 import java.util.List;
 import java.util.stream.Stream;
 
+
 public class EmptyLinkCheckAdmin {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Epic(value = "Link")
-    @Feature(value = "Отсутвие пустых ссылок на странице")
-    @Story(value = "Администратор")
+    @Epic("Link")
+    @Feature("Отсутвие пустых ссылок на странице")
+    @Story("Администратор")
     @ParameterizedTest(name = "{0}")
     @MethodSource
     @DisplayName("Отсутвие пустых ссылок на странице администратора")
@@ -39,14 +40,13 @@ public class EmptyLinkCheckAdmin {
         String url = phpTravels.getCurrentUrl();
         List<String> links = phpTravels.getAllLinks();
         phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle("home"));
+        checkTitleStep(url, title, ParametersXml.getTitle("admin"));
         return links.stream();
     }
 
     @Step("Проверка заголовка страницы {url}")
     @DisplayName("Проверка заголовка страницы {url}")
     static void checkTitleStep(String url, String origin, String conrol) {
-        //Assert.assertEquals("Заголовк страницы " + url + " отличается от контрольного значения", origin, conrol);
-        Assert.assertEquals("Заголовк страницы " + url + " отличается от контрольного значения", conrol, conrol);
+        Assert.assertEquals("Заголовк страницы " + url + " отличается от контрольного значения", origin, conrol);
     }
 }

@@ -10,9 +10,9 @@ import java.util.HashMap;
 
 public class WrongLoginToUser {
 
-    @Epic(value = "Login")
-    @Feature(value = "Попытка входа на страницу")
-    @Story(value = "Пользователь")
+    @Epic("Login")
+    @Feature("Попытка входа на страницу")
+    @Story("Пользователь")
     @Test
     @DisplayName("Попытка входа на старницу пользователя с неправильным паролем")
     void wrongLoginToUser() {

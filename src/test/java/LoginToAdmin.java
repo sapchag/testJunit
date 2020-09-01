@@ -8,9 +8,9 @@ import spec.ParametersXml;
 
 public class LoginToAdmin {
 
-    @Epic(value = "Login")
-    @Feature(value = "Вход на страницу")
-    @Story(value = "Администратор")
+    @Epic("Login")
+    @Feature("Вход на страницу")
+    @Story("Администратор")
     @Test
     @DisplayName("Вход на страницу администратора")
     void adminLogIn() {

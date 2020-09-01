@@ -8,9 +8,9 @@ import spec.ParametersXml;
 
 public class LinkToHome {
 
-    @Epic(value = "Link")
-    @Feature(value = "Доступность старницы")
-    @Story(value = "Домашняя")
+    @Epic("Link")
+    @Feature("Доступность старницы")
+    @Story("Домашняя")
     @Test
     @DisplayName("Доступность домашней страницы")
     void linkToHome() {
