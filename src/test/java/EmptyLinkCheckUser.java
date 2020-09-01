@@ -16,14 +16,12 @@ import java.util.stream.Stream;
 
 public class EmptyLinkCheckUser {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Epic("Link")
-    @Feature("Отсутвие пустых ссылок на странице")
+    @Feature("Отсутствие неработающих ссылок ссылок на странице")
     @Story("Пользователь")
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Отсутвие пустых ссылок на странице пользователя")
+    @DisplayName("Отсутствие неработающих ссылок на странице пользователя")
     void checkLink(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isChecked());
@@ -37,7 +35,7 @@ public class EmptyLinkCheckUser {
 
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();
-        List<String> links = phpTravels.getAllLinks();
+        List<String> links = phpTravels.getOutLinks();
         phpTravels.close();
         checkTitleStep(url, title, ParametersXml.getTitle("user"));
         return links.stream();

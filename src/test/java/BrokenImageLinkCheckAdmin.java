@@ -8,20 +8,21 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spec.UrlChecks;
 import spec.ParametersXml;
+import spec.UrlChecks;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-public class EmptyLinkCheckHome {
+
+public class BrokenImageLinkCheckAdmin {
 
     @Epic("Link")
-    @Feature("Отсутствие неработающих ссылок на странице")
-    @Story("Домашняя")
+    @Feature("Отсутвие битых изображений на странице")
+    @Story("Администратор")
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Отсутствие неработающих ссылок на главной странице")
+    @DisplayName("Отсутвие битых изображений на странице администратора")
     void checkLink(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isChecked());
@@ -29,21 +30,21 @@ public class EmptyLinkCheckHome {
 
     static Stream<String> checkLink() {
         PhpTravels phpTravels = new PhpTravels()
-                .setUrl(ParametersXml.getUrl("home"))
-                .link();
+                .setUrl(ParametersXml.getUrl("admin"))
+                .setParams(ParametersXml.getPageParameters("admin"))
+                .login();
 
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();
-        List<String> links = phpTravels.getOutLinks();
+        List<String> links = phpTravels.getImageLinks();
         phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle("home"));
+        checkTitleStep(url, title, ParametersXml.getTitle("admin"));
         return links.stream();
     }
 
     @Step("Проверка заголовка страницы {url}")
     @DisplayName("Проверка заголовка страницы {url}")
     static void checkTitleStep(String url, String origin, String conrol) {
-        //Assert.assertEquals("Заголовк страницы " + url + " отличается от контрольного значения", origin, conrol);
-        Assert.assertEquals("Заголовк страницы " + url + " отличается от контрольного значения", conrol, conrol);
+        Assert.assertEquals("Заголовк страницы " + url + " отличается от контрольного значения", origin, conrol);
     }
 }

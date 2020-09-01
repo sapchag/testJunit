@@ -8,20 +8,20 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spec.UrlChecks;
 import spec.ParametersXml;
+import spec.UrlChecks;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-public class EmptyLinkCheckHome {
+public class BrokenImageLinkCheckHome {
 
     @Epic("Link")
-    @Feature("Отсутствие неработающих ссылок на странице")
+    @Feature("Отсутвие битых изображений на странице")
     @Story("Домашняя")
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Отсутствие неработающих ссылок на главной странице")
+    @DisplayName("Отсутвие битых изображений на главной странице")
     void checkLink(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isChecked());
@@ -34,7 +34,7 @@ public class EmptyLinkCheckHome {
 
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();
-        List<String> links = phpTravels.getOutLinks();
+        List<String> links = phpTravels.getImageLinks();
         phpTravels.close();
         checkTitleStep(url, title, ParametersXml.getTitle("home"));
         return links.stream();

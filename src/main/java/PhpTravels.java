@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -28,7 +29,7 @@ public class PhpTravels {
     public PhpTravels() {
         logger.info("Выбор и запуск браузера");
         try {
-            int randomDriver = new Random().nextInt(3);
+            int randomDriver = new Random().nextInt(4);
             if (randomDriver == 0) {
                 driver = new RemoteWebDriver(new URL(webDriverUrl), DesiredCapabilities.chrome());
                 browserName = "chrome";
@@ -38,6 +39,9 @@ public class PhpTravels {
             } else if (randomDriver == 2) {
                 driver = new RemoteWebDriver(new URL(webDriverUrl), DesiredCapabilities.internetExplorer());
                 browserName = "internetExplorer";
+            } else if (randomDriver == 3) {
+                driver = new RemoteWebDriver(new URL(webDriverUrl), DesiredCapabilities.operaBlink());
+                browserName = "opera";
             }
         } catch (MalformedURLException e) {
             logger.error(e.getMessage());
@@ -78,7 +82,19 @@ public class PhpTravels {
         return this;
     }
 
-    public List<String> getAllLinks() {
+    public List<String> getImageLinks() {
+        List<String> links = new ArrayList<String>();
+
+        for (WebElement link : driver.findElements(By.tagName("img"))) {
+            url = link.getAttribute("src");
+
+            links.add(url);
+
+        }
+        return links;
+    }
+
+    public List<String> getOutLinks() {
         List<String> links = new ArrayList<String>();
 
         for (WebElement link : driver.findElements(By.tagName("a"))) {
