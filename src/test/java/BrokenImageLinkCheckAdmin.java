@@ -17,10 +17,7 @@ import java.util.stream.Stream;
 
 public class BrokenImageLinkCheckAdmin {
 
-    @Epic("Link")
-    @Feature("Отсутвие битых изображений на странице")
-    @Story("Администратор")
-    @ParameterizedTest(name = "{0}")
+     @ParameterizedTest(name = "{0}")
     @MethodSource
     @DisplayName("Отсутвие битых изображений на странице администратора")
     void checkLink(String url) {
@@ -28,6 +25,9 @@ public class BrokenImageLinkCheckAdmin {
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isChecked());
     }
 
+    @Epic("Link")
+    @Feature("Отсутвие битых изображений на странице")
+    @Story("Администратор")
     static Stream<String> checkLink() {
         PhpTravels phpTravels = new PhpTravels()
                 .setUrl(ParametersXml.getUrl("admin"))
