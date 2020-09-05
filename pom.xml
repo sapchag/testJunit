@@ -17,7 +17,7 @@
         <allure-junit5.version>2.6.0</allure-junit5.version>
     </properties>
 
-    <dependencies>
+     <dependencies>
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
@@ -68,7 +68,6 @@
             <version>13.0</version>
             <scope>compile</scope>
         </dependency>
-
     </dependencies>
 
     <build>
