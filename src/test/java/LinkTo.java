@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import spec.ParametersXml;
+import spec.PhpTravelBuilder;
+import spec.PhpTravels;
 
 @Execution(ExecutionMode.CONCURRENT)
 public class LinkTo {
@@ -17,14 +19,7 @@ public class LinkTo {
     @Test
     @DisplayName("Доступность старницы администратора")
     void linkToAdmin() {
-
-        PhpTravels phpTravels = new PhpTravels();
-        phpTravels
-                .setUrl(ParametersXml.getUrl("admin"))
-                .link();
-        String title = phpTravels.getTitle();
-        phpTravels.close();
-        Assert.assertEquals(title, ParametersXml.getTitle("nologinadmin"));
+        Assert.assertEquals(linkTo("admin"), ParametersXml.getTitle("nologinadmin"));
     }
 
     @Epic("Link")
@@ -33,13 +28,7 @@ public class LinkTo {
     @Test
     @DisplayName("Доступность домашней страницы")
     void linkToHome() {
-        PhpTravels phpTravels = new PhpTravels();
-        phpTravels
-                .setUrl(ParametersXml.getUrl("home"))
-                .link();
-        String title = phpTravels.getTitle();
-        phpTravels.close();
-        Assert.assertEquals(title, ParametersXml.getTitle("home"));
+        Assert.assertEquals(linkTo("home"), ParametersXml.getTitle("home"));
     }
 
     @Test
@@ -48,13 +37,13 @@ public class LinkTo {
     @Story("Пользователь")
     @DisplayName("Доступность старницы пользователя")
     void linkToUser() {
-        PhpTravels phpTravels = new PhpTravels();
-        phpTravels
-                .setUrl(ParametersXml.getUrl("user"))
-                .link();
-        String title = phpTravels.getTitle();
-        phpTravels.close();
-        Assert.assertEquals(title, ParametersXml.getTitle("nologinuser"));
+        Assert.assertEquals(linkTo("user"), ParametersXml.getTitle("nologinuser"));
     }
 
+    static String linkTo(String pageType) {
+        PhpTravels phpTravels = PhpTravelBuilder.createPhpTravelsPage(pageType);
+        String title = phpTravels.getTitle();
+        phpTravels.close();
+        return title;
+    }
 }

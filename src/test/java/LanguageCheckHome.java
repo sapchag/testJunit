@@ -15,6 +15,7 @@ import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spec.ParametersXml;
+import spec.PhpTravels;
 
 import java.util.*;
 import java.util.stream.Stream;

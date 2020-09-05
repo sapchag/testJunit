@@ -1,5 +1,5 @@
 <configuration>
-    <timestamp key="ts" datePattern="yyyy-MM-dd_hh-mm-ss"/>
+    <timestamp key="ts" datePattern="yyyy-MM-dd_HH-mm-ss"/>
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>logs/php-travel-log-${ts}.log</file>
 

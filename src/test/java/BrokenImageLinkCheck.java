@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import spec.ParametersXml;
+import spec.PhpTravelBuilder;
+import spec.PhpTravels;
 import spec.UrlChecks;
 
 import java.util.List;
@@ -47,45 +49,27 @@ public class BrokenImageLinkCheck {
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isChecked());
     }
 
-    static Stream<String> checkLinkAdmin() {
-        PhpTravels phpTravels = new PhpTravels()
-                .setUrl(ParametersXml.getUrl("admin"))
-                .setParams(ParametersXml.getPageParameters("admin"))
-                .login();
+    static Stream<String> checkLink(String pageType) {
+        PhpTravels phpTravels = PhpTravelBuilder.createLoginedPhpTravelsPage(pageType);
 
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();
         List<String> links = phpTravels.getImageLinks();
         phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle("admin"));
+        checkTitleStep(url, title, ParametersXml.getTitle(pageType));
         return links.stream();
+    }
+
+    static Stream<String> checkLinkAdmin() {
+        return checkLink("admin");
     }
 
     static Stream<String> checkLinkUser() {
-        PhpTravels phpTravels = new PhpTravels()
-                .setUrl(ParametersXml.getUrl("user"))
-                .setParams(ParametersXml.getPageParameters("user"))
-                .login();
-
-        String title = phpTravels.getTitle();
-        String url = phpTravels.getCurrentUrl();
-        List<String> links = phpTravels.getImageLinks();
-        phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle("user"));
-        return links.stream();
+        return checkLink("user");
     }
 
     static Stream<String> checkLinkHome() {
-        PhpTravels phpTravels = new PhpTravels()
-                .setUrl(ParametersXml.getUrl("home"))
-                .link();
-
-        String title = phpTravels.getTitle();
-        String url = phpTravels.getCurrentUrl();
-        List<String> links = phpTravels.getImageLinks();
-        phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle("home"));
-        return links.stream();
+        return checkLink("home");
     }
 
     @Step("Проверка заголовка страницы {url}")

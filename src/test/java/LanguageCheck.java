@@ -15,31 +15,33 @@ import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spec.ParametersXml;
+import spec.PhpTravelBuilder;
 import spec.PhpTravels;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class LanguageCheckUser {
+public class LanguageCheck {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    PhpTravels phpTravels;
+    PhpTravels phpTravelsHome;
+    PhpTravels phpTravelsUser;
 
     @BeforeAll
     void initAll() {
-        phpTravels = new PhpTravels()
-                .setUrl(ParametersXml.getUrl("user"))
-                .setParams(ParametersXml.getPageParameters("user"))
-                .login();
-
-        checkTitleStep(phpTravels.getCurrentUrl(), phpTravels.getTitle(),
+        phpTravelsHome = PhpTravelBuilder.createPhpTravelsPage("home");
+        checkTitleStep(phpTravelsHome.getCurrentUrl(), phpTravelsHome.getTitle(),
+                ParametersXml.getTitle("home"));
+        phpTravelsUser = PhpTravelBuilder.createLoginedPhpTravelsPage("user");
+        checkTitleStep(phpTravelsUser.getCurrentUrl(), phpTravelsUser.getTitle(),
                 ParametersXml.getTitle("user"));
     }
 
     @AfterAll
     void tearDownAll() {
-        phpTravels.close();
+        phpTravelsHome.close();
+        phpTravelsUser.close();
     }
 
     @Epic("Language")
@@ -48,18 +50,39 @@ public class LanguageCheckUser {
     @ParameterizedTest(name = "{0}")
     @MethodSource
     @DisplayName("Смена языка на странице пользователя")
-    void checkLanguage(String alias, String control) {
-        phpTravels.swithLanguage(alias);
+    void checkLanguageUser(String alias, String control) {
+        phpTravelsUser.swithLanguage(alias);
         String findString = "//a[contains(@href, 'https://www.phptravels.net/supplier-register/')]";
-        String result = phpTravels.getDriver()
+        String result = phpTravelsUser.getDriver()
                 .findElement(By.xpath(findString)).getText();
         logger.info("Контрольное слово : " + result);
-        checkLanguageStep(phpTravels.getLanguage(), alias, control, result);
+        checkLanguageStep(phpTravelsUser.getLanguage(), alias, control, result);
     }
 
-    static Stream<Arguments> checkLanguage() {
+    static Stream<Arguments> checkLanguageUser() {
         ArrayList<Arguments> aList = new ArrayList<Arguments>();
-        ParametersXml.getNodeValues("languages").forEach((k, v) ->aList.add(Arguments.of(k,v)));
+        ParametersXml.getNodeValues("languages").forEach((k, v) -> aList.add(Arguments.of(k, v)));
+        return aList.stream();
+    }
+
+    @Epic("Language")
+    @Feature("Смена языка на главной странице")
+    @Story("Домашняя")
+    @ParameterizedTest(name = "{0}")
+    @MethodSource
+    @DisplayName("Смена языка на главной странице")
+    void checkLanguageHome(String alias, String control) {
+        phpTravelsHome.swithLanguage(alias);
+        String findString = "//a[contains(@href, 'https://www.phptravels.net/supplier-register/')]";
+        String result = phpTravelsHome.getDriver()
+                .findElement(By.xpath(findString)).getText();
+        logger.info("Контрольное слово : " + result);
+        checkLanguageStep(phpTravelsHome.getLanguage(), alias, control, result);
+    }
+
+    static Stream<Arguments> checkLanguageHome() {
+        ArrayList<Arguments> aList = new ArrayList<Arguments>();
+        ParametersXml.getNodeValues("languages").forEach((k, v) -> aList.add(Arguments.of(k, v)));
         return aList.stream();
     }
 

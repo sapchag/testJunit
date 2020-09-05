@@ -1,16 +1,20 @@
+package spec;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +26,7 @@ public class PhpTravels {
     private HashMap<String, String> params;
     private String url;
     private WebDriver driver;
-    String webDriverUrl = "http://localhost:4444/wd/hub";
+    String webDriverUrl = ParametersXml.getNodeValues("webdriver").get("url").toString();
     String browserName;
     WebDriverWait wait;
 
@@ -45,6 +49,7 @@ public class PhpTravels {
             }
         } catch (MalformedURLException e) {
             logger.error(e.getMessage());
+            e.getCause();
         }
         driver.manage().window().maximize();
         logger.info(browserName);
@@ -70,6 +75,7 @@ public class PhpTravels {
     public PhpTravels login() {
         link();
 
+        if (params.isEmpty()) return this;
         params.forEach((k, v) -> driver.findElement(By.name(k.toString())).sendKeys(v.toString()));
         driver.findElement(By.xpath("//form/button")).click();
         try {
@@ -78,6 +84,7 @@ public class PhpTravels {
         } catch (TimeoutException e) {
             logger.error(e.getMessage());
         }
+
         logger.info("-->" + driver.getTitle());
         return this;
     }
@@ -103,7 +110,10 @@ public class PhpTravels {
             links.add(url);
 
         }
-        return links;
+        return links.stream()
+                .filter(Objects::nonNull)
+                .filter(link -> !link.contains("javascript:void"))
+                .collect(Collectors.toList());
     }
 
     public PhpTravels swithLanguage(String alias) {
