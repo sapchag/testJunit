@@ -1,9 +1,6 @@
 package spec;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -51,7 +48,6 @@ public class PhpTravels {
             logger.error(e.getMessage());
             e.getCause();
         }
-        driver.manage().window().maximize();
         logger.info(browserName);
         wait = new WebDriverWait(driver, 10);
 
@@ -101,29 +97,30 @@ public class PhpTravels {
         return links;
     }
 
-    public List<String> getOutLinks() {
+    public List<String> getAllLinks() {
         List<String> links = new ArrayList<String>();
 
         for (WebElement link : driver.findElements(By.tagName("a"))) {
             url = link.getAttribute("href");
-
             links.add(url);
-
         }
         return links.stream()
                 .filter(Objects::nonNull)
-                .filter(link -> !link.contains("javascript:void"))
+                .filter(link -> !link.contains("javascript:"))
                 .collect(Collectors.toList());
     }
 
     public PhpTravels swithLanguage(String alias) {
         logger.info(">> " + alias);
-        driver.findElement(By.id("dropdownLangauge")).click();
-        driver.findElement(By.id(alias)).click();
-
-        String findString = "//a[contains(@id, 'dropdownLangauge')]";
-        wait.until(ExpectedConditions
-                .visibilityOfElementLocated(By.xpath(findString)));
+        try {
+            driver.findElement(By.id("dropdownLangauge")).click();
+            driver.findElement(By.id(alias)).click();
+            String findString = "//a[contains(@id, 'dropdownLangauge')]";
+            wait.until(ExpectedConditions
+                    .visibilityOfElementLocated(By.xpath(findString)));
+        } catch (ElementNotInteractableException | TimeoutException e) {
+            logger.error(e.getMessage());
+        }
         logger.info(getLanguage());
         return this;
     }

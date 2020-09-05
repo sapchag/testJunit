@@ -11,38 +11,50 @@ import spec.UrlChecks;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Epic("Изображения")
-@Feature("Отсутвие битых изображений на странице")
-public class BrokenImageLinkCheck {
+@Epic("Ссылки")
+@Feature("Отсутствие неработающих ссылок на странице")
+public class EmptyLinkCheck {
 
-    @Issue("18")
+    @Issue("12")
     @Story("Администратор")
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Отсутвие битых изображений на странице администратора")
+    @DisplayName("Отсутствие неработающих ссылок на странице администратора")
     void checkLinkAdmin(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
     }
 
-    @Issue("17")
+    @Issue("10")
+    @Story("Домашняя")
+    @ParameterizedTest(name = "{0}")
+    @MethodSource
+    @DisplayName("Отсутствие неработающих ссылок на главной странице")
+    void checkLinkHome(String url) {
+        UrlChecks urlChecks = new UrlChecks(url);
+        Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
+    }
+
+    @Issue("11")
     @Story("Пользователь")
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Отсутвие битых изображений на странице пользователя")
+    @DisplayName("Отсутствие неработающих ссылок на странице пользователя")
     void checkLinkUser(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
     }
 
-    @Issue("16")
-    @Story("Домашняя")
-    @ParameterizedTest(name = "{0}")
-    @MethodSource
-    @DisplayName("Отсутвие битых изображений на домашней странице")
-    void checkLinkHome(String url) {
-        UrlChecks urlChecks = new UrlChecks(url);
-        Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
+    static Stream<String> checkLinkAdmin() {
+        return checkLink("admin");
+    }
+
+    static Stream<String> checkLinkHome() {
+        return checkLink("home");
+    }
+
+    static Stream<String> checkLinkUser() {
+        return checkLink("user");
     }
 
     static Stream<String> checkLink(String pageType) {
@@ -50,22 +62,10 @@ public class BrokenImageLinkCheck {
 
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();
-        List<String> links = phpTravels.getImageLinks();
+        List<String> links = phpTravels.getAllLinks();
         phpTravels.close();
         checkTitleStep(url, title, ParametersXml.getTitle(pageType));
         return links.stream();
-    }
-
-    static Stream<String> checkLinkAdmin() {
-        return checkLink("admin");
-    }
-
-    static Stream<String> checkLinkUser() {
-        return checkLink("user");
-    }
-
-    static Stream<String> checkLinkHome() {
-        return checkLink("home");
     }
 
     @Step("Проверка заголовка страницы {url}")

@@ -1,5 +1,6 @@
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
 import io.qameta.allure.Story;
 import org.junit.Assert;
 import org.junit.jupiter.api.DisplayName;
@@ -10,11 +11,13 @@ import spec.ParametersXml;
 import spec.PhpTravelBuilder;
 import spec.PhpTravels;
 
+@Epic("Link")
+@Feature("Доступность старницы")
 @Execution(ExecutionMode.CONCURRENT)
 public class LinkTo {
 
-    @Epic("Link")
-    @Feature("Доступность старницы")
+
+    @Issue("1")
     @Story("Администратор")
     @Test
     @DisplayName("Доступность старницы администратора")
@@ -22,8 +25,7 @@ public class LinkTo {
         Assert.assertEquals(linkTo("admin"), ParametersXml.getTitle("nologinadmin"));
     }
 
-    @Epic("Link")
-    @Feature("Доступность старницы")
+    @Issue("2")
     @Story("Домашняя")
     @Test
     @DisplayName("Доступность домашней страницы")
@@ -31,10 +33,9 @@ public class LinkTo {
         Assert.assertEquals(linkTo("home"), ParametersXml.getTitle("home"));
     }
 
-    @Test
-    @Epic("Link")
-    @Feature("Доступность старницы")
+    @Issue("3")
     @Story("Пользователь")
+    @Test
     @DisplayName("Доступность старницы пользователя")
     void linkToUser() {
         Assert.assertEquals(linkTo("user"), ParametersXml.getTitle("nologinuser"));

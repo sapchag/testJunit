@@ -1,5 +1,6 @@
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
 import io.qameta.allure.Story;
 import org.junit.Assert;
 import org.junit.jupiter.api.DisplayName;
@@ -9,9 +10,10 @@ import spec.PhpTravels;
 
 import java.util.HashMap;
 
+@Epic("Login")
 public class LoginTo {
 
-    @Epic("Login")
+    @Issue("6")
     @Feature("Вход на страницу")
     @Story("Администратор")
     @Test
@@ -20,7 +22,7 @@ public class LoginTo {
         logInTo("admin", true);
     }
 
-    @Epic("Login")
+    @Issue("5")
     @Feature("Вход на страницу")
     @Story("Пользователь")
     @Test
@@ -29,7 +31,7 @@ public class LoginTo {
         logInTo("user", true);
     }
 
-    @Epic("Login")
+    @Issue("7")
     @Feature("Попытка входа на страницу")
     @Story("Администратор")
     @Test
@@ -38,7 +40,7 @@ public class LoginTo {
         logInTo("admin", false);
     }
 
-    @Epic("Login")
+    @Issue("4")
     @Feature("Попытка входа на страницу")
     @Story("Пользователь")
     @Test

@@ -16,12 +16,12 @@ public class UrlChecks {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private String message;
     private String url;
-    private boolean checked;
+    private boolean checkOk;
 
     public UrlChecks(String url) {
         this.url = url;
         message = url;
-        checked = false;
+        checkOk = false;
         if (isValidUrl()) {
             checkResponse();
         }
@@ -32,11 +32,9 @@ public class UrlChecks {
             new URL(url).toURI();
             return true;
         } catch (MalformedURLException | URISyntaxException e) {
-            if (url == null || e.getMessage().contains("unknown protocol: javascript")) {
-                checked = true;
-            }
+            message = e.getMessage();
+            checkOk = false;
         }
-        message = "ссылка не корректна";
         return false;
     }
 
@@ -52,12 +50,12 @@ public class UrlChecks {
             if (respCode == 404 || respCode == 500) {
                 message = String.valueOf(respCode);
             } else {
-                checked = true;
+                checkOk = true;
             }
 
         } catch (IOException | ClassCastException | IllegalArgumentException e) {
             if (e.getMessage().contains("MailToURLConnection")) {
-                checked = isValidEmail(url.replace("mailto:", ""));
+                checkOk = isValidEmail(url.replace("mailto:", ""));
             } else {
                 message = e.getMessage();
                 logger.error(message);
@@ -71,8 +69,8 @@ public class UrlChecks {
         return validator.isValid(email);
     }
 
-    public boolean isChecked() {
-        return checked;
+    public boolean isCheckOk() {
+        return checkOk;
     }
 
     public String getMessage() {
