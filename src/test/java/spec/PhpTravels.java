@@ -1,6 +1,14 @@
 package spec;
 
+import net.lightbody.bmp.BrowserMobProxyServer;
+import net.lightbody.bmp.client.ClientUtil;
+import net.lightbody.bmp.core.har.HarEntry;
+import net.lightbody.bmp.proxy.CaptureType;
 import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.net.NetworkUtils;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,7 +18,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -26,29 +33,65 @@ public class PhpTravels {
     String webDriverUrl = ParametersXml.getNodeValues("webdriver").get("url").toString();
     String browserName;
     WebDriverWait wait;
+    BrowserMobProxyServer proxy;
 
     public PhpTravels() {
         logger.info("Выбор и запуск браузера");
-        try {
-            int randomDriver = new Random().nextInt(4);
-            if (randomDriver == 0) {
-                driver = new RemoteWebDriver(new URL(webDriverUrl), DesiredCapabilities.chrome());
+
+        proxy = new BrowserMobProxyServer();
+        proxy.setTrustAllServers(true);
+        proxy.setHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
+        proxy.enableHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
+        Proxy seleniumProxy = null;
+        seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
+//        String ipAddress = new NetworkUtils().getIp4NonLoopbackAddressOfThisMachine().getHostAddress();
+//        int port = proxy.getPort();
+//        seleniumProxy.setHttpProxy(ipAddress + ":" + port)
+//                .setSslProxy(ipAddress + ":" + port)
+//                .setFtpProxy(ipAddress + ":" + port);
+        seleniumProxy.setHttpProxy(webDriverUrl)
+                    .setSslProxy(webDriverUrl)
+                    .setFtpProxy(webDriverUrl);
+        DesiredCapabilities capability = new DesiredCapabilities();
+
+        int browserNumber = new Random().nextInt(4);
+        switch (browserNumber) {
+            case 0:
+                capability = DesiredCapabilities.chrome();
                 browserName = "chrome";
-            } else if (randomDriver == 1) {
-                driver = new RemoteWebDriver(new URL(webDriverUrl), DesiredCapabilities.firefox());
+                break;
+            case 1:
+                String ipAddress = new NetworkUtils().getIp4NonLoopbackAddressOfThisMachine().getHostAddress();
+                int port = proxy.getPort();
+                seleniumProxy.setHttpProxy(ipAddress + ":" + port)
+                        .setSslProxy(ipAddress + ":" + port)
+                        .setFtpProxy(ipAddress + ":" + port);
+                capability = DesiredCapabilities.firefox();
                 browserName = "firefox";
-            } else if (randomDriver == 2) {
-                driver = new RemoteWebDriver(new URL(webDriverUrl), DesiredCapabilities.internetExplorer());
+                break;
+            case 2:
+                capability = DesiredCapabilities.internetExplorer();
                 browserName = "internetExplorer";
-            } else if (randomDriver == 3) {
-                driver = new RemoteWebDriver(new URL(webDriverUrl), DesiredCapabilities.operaBlink());
+                break;
+            case 3:
+                capability = DesiredCapabilities.operaBlink();
                 browserName = "opera";
-            }
+        }
+        capability.setCapability(CapabilityType.PROXY, seleniumProxy);
+        capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+//        capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+        try {
+
+            driver = new RemoteWebDriver(new URL(webDriverUrl), capability);
         } catch (MalformedURLException e) {
             logger.error(e.getMessage());
             e.getCause();
         }
+
+        proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
         logger.info(browserName);
+        proxy.start();
+        proxy.newHar();
         wait = new WebDriverWait(driver, 10);
 
     }
@@ -90,9 +133,7 @@ public class PhpTravels {
 
         for (WebElement link : driver.findElements(By.tagName("img"))) {
             url = link.getAttribute("src");
-
             links.add(url);
-
         }
         return links;
     }
@@ -135,7 +176,15 @@ public class PhpTravels {
     }
 
     public PhpTravels close() {
+        List<HarEntry> entries = proxy.getHar().getLog().getEntries();
+        for (HarEntry entry : entries) {
+            logger.info("URL " + entry.getRequest().getUrl());
+            logger.info("Response Code " + entry.getResponse().getStatus());
+        }
+        proxy.endHar();
+        proxy.abort();
         driver.quit();
+
         logger.info(browserName + " закрыт");
         return this;
     }

@@ -68,7 +68,14 @@
             <version>13.0</version>
             <scope>compile</scope>
         </dependency>
-    </dependencies>
+         <dependency>
+             <groupId>net.lightbody.bmp</groupId>
+             <artifactId>browsermob-core</artifactId>
+             <version>2.1.2</version>
+             <scope>test</scope>
+         </dependency>
+
+     </dependencies>
 
     <build>
         <plugins>
