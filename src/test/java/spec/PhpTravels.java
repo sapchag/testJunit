@@ -5,15 +5,11 @@ import net.lightbody.bmp.client.ClientUtil;
 import net.lightbody.bmp.core.har.HarEntry;
 import net.lightbody.bmp.proxy.CaptureType;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.net.NetworkUtils;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,16 +38,9 @@ public class PhpTravels {
         proxy.setTrustAllServers(true);
         proxy.setHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
         proxy.enableHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
+        proxy.start(0);
         Proxy seleniumProxy = null;
         seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
-//        String ipAddress = new NetworkUtils().getIp4NonLoopbackAddressOfThisMachine().getHostAddress();
-//        int port = proxy.getPort();
-//        seleniumProxy.setHttpProxy(ipAddress + ":" + port)
-//                .setSslProxy(ipAddress + ":" + port)
-//                .setFtpProxy(ipAddress + ":" + port);
-        seleniumProxy.setHttpProxy(webDriverUrl)
-                    .setSslProxy(webDriverUrl)
-                    .setFtpProxy(webDriverUrl);
         DesiredCapabilities capability = new DesiredCapabilities();
 
         int browserNumber = new Random().nextInt(4);
@@ -61,11 +50,6 @@ public class PhpTravels {
                 browserName = "chrome";
                 break;
             case 1:
-                String ipAddress = new NetworkUtils().getIp4NonLoopbackAddressOfThisMachine().getHostAddress();
-                int port = proxy.getPort();
-                seleniumProxy.setHttpProxy(ipAddress + ":" + port)
-                        .setSslProxy(ipAddress + ":" + port)
-                        .setFtpProxy(ipAddress + ":" + port);
                 capability = DesiredCapabilities.firefox();
                 browserName = "firefox";
                 break;
@@ -79,7 +63,7 @@ public class PhpTravels {
         }
         capability.setCapability(CapabilityType.PROXY, seleniumProxy);
         capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-//        capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+        capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, false);
         try {
 
             driver = new RemoteWebDriver(new URL(webDriverUrl), capability);
@@ -90,7 +74,6 @@ public class PhpTravels {
 
         proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
         logger.info(browserName);
-        proxy.start();
         proxy.newHar();
         wait = new WebDriverWait(driver, 10);
 
@@ -178,8 +161,8 @@ public class PhpTravels {
     public PhpTravels close() {
         List<HarEntry> entries = proxy.getHar().getLog().getEntries();
         for (HarEntry entry : entries) {
-            logger.info("URL " + entry.getRequest().getUrl());
-            logger.info("Response Code " + entry.getResponse().getStatus());
+            logger.info(entry.getStartedDateTime() + " URL " + entry.getRequest().getUrl());
+            logger.info(entry.getStartedDateTime() + " Response Code " + entry.getResponse().getStatus());
         }
         proxy.endHar();
         proxy.abort();
@@ -187,6 +170,18 @@ public class PhpTravels {
 
         logger.info(browserName + " закрыт");
         return this;
+    }
+
+    public String getProxyLogs() {
+        String logs = "";
+        for (HarEntry entry : proxy.getHar().getLog().getEntries()) {
+            logs = logs + entry.getStartedDateTime() + " " +
+                    entry.getRequest().getUrl() + " " + entry.getResponse().getStatus() +
+                    " " + System.lineSeparator();
+        }
+        proxy.endHar();
+        proxy.newHar();
+        return logs;
     }
 
     public PhpTravels setParams(HashMap params) {
