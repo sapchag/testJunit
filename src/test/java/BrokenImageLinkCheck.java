@@ -22,6 +22,7 @@ public class BrokenImageLinkCheck {
     @DisplayName("Отсутвие битых изображений на странице администратора")
     void checkLinkAdmin(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
+        Allure.addAttachment("Траффик", "text/plain", urlChecks.getProxyLogs());
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
     }
 
@@ -32,6 +33,7 @@ public class BrokenImageLinkCheck {
     @DisplayName("Отсутвие битых изображений на странице пользователя")
     void checkLinkUser(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
+        Allure.addAttachment("Траффик", "text/plain", urlChecks.getProxyLogs());
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
     }
 
@@ -42,6 +44,7 @@ public class BrokenImageLinkCheck {
     @DisplayName("Отсутвие битых изображений на домашней странице")
     void checkLinkHome(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
+        Allure.addAttachment("Траффик", "text/plain", urlChecks.getProxyLogs());
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
     }
 
@@ -51,8 +54,9 @@ public class BrokenImageLinkCheck {
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();
         List<String> links = phpTravels.getImageLinks();
+        String log = phpTravels.getProxyLogs();
         phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle(pageType));
+        checkTitleStep(url, title, ParametersXml.getTitle(pageType), log);
         return links.stream();
     }
 
@@ -70,7 +74,8 @@ public class BrokenImageLinkCheck {
 
     @Step("Проверка заголовка страницы {url}")
     @DisplayName("Проверка заголовка страницы {url}")
-    static void checkTitleStep(String url, String origin, String conrol) {
+    static void checkTitleStep(String url, String origin, String conrol, String log) {
+        Allure.addAttachment("Траффик", "text/plain", log);
         Assert.assertEquals("Заголовк страницы " + url + " отличается от контрольного значения", origin, conrol);
     }
 }

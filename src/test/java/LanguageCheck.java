@@ -50,15 +50,17 @@ public class LanguageCheck {
         PhpTravels phpTravels = PhpTravelBuilder.createLoginedPhpTravelsPage(pageType);
         String url = phpTravels.getCurrentUrl();
         String title = phpTravels.getTitle();
+        String loginLog = phpTravels.getProxyLogs();
         phpTravels.swithLanguage(alias);
         String findString = "//a[contains(@href, 'https://www.phptravels.net/supplier-register/')]";
         String result = phpTravels.getDriver()
                 .findElement(By.xpath(findString)).getText();
         logger.info("Контрольное слово : " + result);
         String language = phpTravels.getLanguage();
+        String languageLog = phpTravels.getProxyLogs();
         phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle(pageType));
-        checkLanguageStep(language, alias, control, result);
+        checkTitleStep(url, title, ParametersXml.getTitle(pageType), loginLog);
+        checkLanguageStep(language, alias, result, control, languageLog);
 
     }
 
@@ -70,13 +72,15 @@ public class LanguageCheck {
 
     @Step("Проверка заголовка страницы {url}")
     @DisplayName("Проверка заголовка страницы {url}")
-    static void checkTitleStep(String url, String origin, String conrol) {
+    static void checkTitleStep(String url, String origin, String conrol, String log) {
+        Allure.addAttachment("Траффик", "text/plain", log);
         Assert.assertEquals("Заголовк страницы " + url + " отличается от контрольного значения", origin, conrol);
     }
 
     @Step("Проверка смены языка {language}")
     @DisplayName("Проверка смены языка {language}")
-    static void checkLanguageStep(String language, String alias, String origin, String conrol) {
+    static void checkLanguageStep(String language, String alias, String origin, String conrol, String log) {
+        Allure.addAttachment("Траффик", "text/plain", log);
         Assert.assertEquals("Контрольная фраза для " + language + " не соответсвует значению на странице",
                 origin, conrol);
     }

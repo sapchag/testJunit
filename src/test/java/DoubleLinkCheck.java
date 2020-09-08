@@ -63,8 +63,9 @@ public class DoubleLinkCheck {
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();
         List<String> links = phpTravels.getAllLinks();
+        String log = phpTravels.getProxyLogs();
         phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle(pageType));
+        checkTitleStep(url, title, ParametersXml.getTitle(pageType), log);
 
         Map<String, Long> result =
                 links.stream()
@@ -79,7 +80,8 @@ public class DoubleLinkCheck {
 
     @Step("Проверка заголовка страницы {url}")
     @DisplayName("Проверка заголовка страницы {url}")
-    static void checkTitleStep(String url, String origin, String conrol) {
+    static void checkTitleStep(String url, String origin, String conrol, String log) {
+        Allure.addAttachment("Траффик", "text/plain", log);
         Assert.assertEquals("Заголовк страницы " + url + " отличается от контрольного значения", origin, conrol);
     }
 }

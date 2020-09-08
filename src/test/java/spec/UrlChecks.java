@@ -1,5 +1,9 @@
 package spec;
 
+import net.lightbody.bmp.BrowserMobProxyServer;
+import net.lightbody.bmp.client.ClientUtil;
+import net.lightbody.bmp.core.har.HarEntry;
+import net.lightbody.bmp.proxy.CaptureType;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -17,6 +21,7 @@ public class UrlChecks {
     private String message;
     private String url;
     private boolean checkOk;
+    private String proxyLogs;
 
     public UrlChecks(String url) {
         this.url = url;
@@ -42,6 +47,7 @@ public class UrlChecks {
         boolean result = true;
         HttpURLConnection huc = null;
         int respCode = 200;
+
         try {
             huc = (HttpURLConnection) (new URL(url).openConnection());
             huc.setRequestMethod("HEAD");
@@ -56,11 +62,15 @@ public class UrlChecks {
         } catch (IOException | ClassCastException | IllegalArgumentException e) {
             if (e.getMessage().contains("MailToURLConnection")) {
                 checkOk = isValidEmail(url.replace("mailto:", ""));
+                message = "email";
+                proxyLogs = message;
             } else {
                 message = e.getMessage();
                 logger.error(message);
             }
         }
+
+        proxyLogs = url + " " + respCode;
     }
 
     public boolean isValidEmail(String email) {
@@ -75,5 +85,9 @@ public class UrlChecks {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getProxyLogs() {
+        return proxyLogs;
     }
 }

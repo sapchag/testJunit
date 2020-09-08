@@ -1,7 +1,4 @@
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Issue;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,6 +60,7 @@ public class LoginTo {
                 .setParams(hMap)
                 .login();
         String title = phpTravels.getTitle();
+        Allure.addAttachment("Траффик", "text/plain", phpTravels.getProxyLogs());
         phpTravels.close();
         Assert.assertEquals(title, ParametersXml.getTitle(login ? pageType : "nologin" + pageType));
     }

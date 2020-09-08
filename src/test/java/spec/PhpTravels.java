@@ -35,7 +35,6 @@ public class PhpTravels {
         logger.info("Выбор и запуск браузера");
 
         proxy = new BrowserMobProxyServer();
-        proxy.setTrustAllServers(true);
         proxy.setHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
         proxy.enableHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
         proxy.start(0);
@@ -159,11 +158,6 @@ public class PhpTravels {
     }
 
     public PhpTravels close() {
-        List<HarEntry> entries = proxy.getHar().getLog().getEntries();
-        for (HarEntry entry : entries) {
-            logger.info(entry.getStartedDateTime() + " URL " + entry.getRequest().getUrl());
-            logger.info(entry.getStartedDateTime() + " Response Code " + entry.getResponse().getStatus());
-        }
         proxy.endHar();
         proxy.abort();
         driver.quit();
@@ -175,8 +169,7 @@ public class PhpTravels {
     public String getProxyLogs() {
         String logs = "";
         for (HarEntry entry : proxy.getHar().getLog().getEntries()) {
-            logs = logs + entry.getStartedDateTime() + " " +
-                    entry.getRequest().getUrl() + " " + entry.getResponse().getStatus() +
+            logs = logs + entry.getRequest().getUrl() + " " + entry.getResponse().getStatus() +
                     " " + System.lineSeparator();
         }
         proxy.endHar();

@@ -22,6 +22,7 @@ public class EmptyLinkCheck {
     @DisplayName("Отсутствие неработающих ссылок на странице администратора")
     void checkLinkAdmin(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
+        Allure.addAttachment("Траффик", "text/plain", urlChecks.getProxyLogs());
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
     }
 
@@ -32,6 +33,7 @@ public class EmptyLinkCheck {
     @DisplayName("Отсутствие неработающих ссылок на главной странице")
     void checkLinkHome(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
+        Allure.addAttachment("Траффик", "text/plain", urlChecks.getProxyLogs());
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
     }
 
@@ -42,6 +44,7 @@ public class EmptyLinkCheck {
     @DisplayName("Отсутствие неработающих ссылок на странице пользователя")
     void checkLinkUser(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
+        Allure.addAttachment("Траффик", "text/plain", urlChecks.getProxyLogs());
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
     }
 
@@ -63,14 +66,16 @@ public class EmptyLinkCheck {
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();
         List<String> links = phpTravels.getAllLinks();
+        String log = phpTravels.getProxyLogs();
         phpTravels.close();
-        checkTitleStep(url, title, ParametersXml.getTitle(pageType));
+        checkTitleStep(url, title, ParametersXml.getTitle(pageType), log);
         return links.stream();
     }
 
     @Step("Проверка заголовка страницы {url}")
     @DisplayName("Проверка заголовка страницы {url}")
-    static void checkTitleStep(String url, String origin, String conrol) {
+    static void checkTitleStep(String url, String origin, String conrol, String log) {
+        Allure.addAttachment("Траффик", "text/plain", log);
         Assert.assertEquals("Заголовк страницы " + url + " отличается от контрольного значения", origin, conrol);
     }
 }
