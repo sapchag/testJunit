@@ -10,7 +10,7 @@ import java.util.HashMap;
 @Epic("Login")
 public class LoginTo {
 
-    @Issue("6")
+    @Issue("5")
     @Feature("Вход на страницу")
     @Story("Администратор")
     @Test
@@ -19,7 +19,7 @@ public class LoginTo {
         logInTo("admin", true);
     }
 
-    @Issue("5")
+    @Issue("4")
     @Feature("Вход на страницу")
     @Story("Пользователь")
     @Test
@@ -37,7 +37,7 @@ public class LoginTo {
         logInTo("admin", false);
     }
 
-    @Issue("4")
+    @Issue("6")
     @Feature("Попытка входа на страницу")
     @Story("Пользователь")
     @Test

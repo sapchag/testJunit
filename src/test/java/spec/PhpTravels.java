@@ -1,5 +1,6 @@
 package spec;
 
+import io.qameta.allure.Allure;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
 import net.lightbody.bmp.core.har.HarEntry;
@@ -8,6 +9,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -60,6 +62,8 @@ public class PhpTravels {
                 capability = DesiredCapabilities.operaBlink();
                 browserName = "opera";
         }
+
+        logger.info(browserName);
         capability.setCapability(CapabilityType.PROXY, seleniumProxy);
         capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
         capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, false);
@@ -68,11 +72,19 @@ public class PhpTravels {
             driver = new RemoteWebDriver(new URL(webDriverUrl), capability);
         } catch (MalformedURLException e) {
             logger.error(e.getMessage());
+            Allure.addAttachment("Ошибка", "text/plain", e.getMessage());
+            e.getCause();
+        } catch (UnreachableBrowserException e) {
+            logger.error(e.getMessage());
+            Allure.addAttachment("Ошибка", "text/plain", e.getMessage());
+            e.getCause();
+        } catch (SessionNotCreatedException e) {
+            logger.error(e.getMessage());
+            Allure.addAttachment("Ошибка", "text/plain", e.getMessage());
             e.getCause();
         }
-
+        assert driver != null : "Драйвер " + browserName + " не создан";
         proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
-        logger.info(browserName);
         proxy.newHar();
         wait = new WebDriverWait(driver, 10);
 
@@ -87,7 +99,13 @@ public class PhpTravels {
     }
 
     public PhpTravels link() {
-        driver.get(url);
+        try {
+            driver.get(url);
+        } catch (TimeoutException e) {
+            logger.error(e.getMessage());
+            Allure.addAttachment("Ошибка", "text/plain", e.getMessage());
+            e.getCause();
+        }
         logger.info(url);
         logger.info(" >" + driver.getTitle());
         return this;

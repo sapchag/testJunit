@@ -20,7 +20,7 @@ public class ParametersXml {
     static final String path = "src/main/resources/PhpTravelConfig.xml";
     static final Logger logger = LoggerFactory.getLogger(ParametersXml.class);
 
-    public static HashMap getNodeValues(String nodeName, String... attributeParams) {
+    public static HashMap<String, String> getNodeValues(String nodeName, String... attributeParams) {
 
         HashMap<String, String> hMap = new HashMap<String, String>();
         try {
