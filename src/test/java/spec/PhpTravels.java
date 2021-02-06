@@ -29,11 +29,32 @@ public class PhpTravels {
     private String url;
     private WebDriver driver;
     String webDriverUrl = ParametersXml.getNodeValues("webdriver").get("url").toString();
-    String browserName;
+    BROWSER browser;
     WebDriverWait wait;
     BrowserMobProxyServer proxy;
 
+    public enum BROWSER {
+        CHROME, FIREFOX, OPERA, IE, EDGE
+    }
+
     public PhpTravels() {
+        ArrayList<BROWSER> browsers = new ArrayList<BROWSER>();
+
+        browsers.add(BROWSER.CHROME);
+        browsers.add(BROWSER.FIREFOX);
+        browsers.add(BROWSER.IE);
+        browsers.add(BROWSER.OPERA);
+        browsers.add(BROWSER.EDGE);
+
+        Collections.shuffle(browsers);
+        setBrowser(browsers.get(0));
+    }
+
+    public PhpTravels(BROWSER browser) {
+        setBrowser(browser);
+    }
+
+    public PhpTravels setBrowser(BROWSER browser) {
         logger.info("Выбор и запуск браузера");
 
         proxy = new BrowserMobProxyServer();
@@ -43,27 +64,25 @@ public class PhpTravels {
         Proxy seleniumProxy = null;
         seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
         DesiredCapabilities capability = new DesiredCapabilities();
-
-        int browserNumber = new Random().nextInt(4);
-        switch (browserNumber) {
-            case 0:
+        this.browser = browser;
+        switch (browser) {
+            case CHROME:
                 capability = DesiredCapabilities.chrome();
-                browserName = "chrome";
                 break;
-            case 1:
+            case FIREFOX:
                 capability = DesiredCapabilities.firefox();
-                browserName = "firefox";
                 break;
-            case 2:
-                capability = DesiredCapabilities.internetExplorer();
-                browserName = "internetExplorer";
-                break;
-            case 3:
+            case OPERA:
                 capability = DesiredCapabilities.operaBlink();
-                browserName = "opera";
+                break;
+            case IE:
+                capability = DesiredCapabilities.internetExplorer();
+                break;
+            case EDGE:
+                capability = DesiredCapabilities.edge();
         }
 
-        logger.info(browserName);
+        logger.info(browser.toString());
         capability.setCapability(CapabilityType.PROXY, seleniumProxy);
         capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
         capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, false);
@@ -83,11 +102,11 @@ public class PhpTravels {
             Allure.addAttachment("Ошибка", "text/plain", e.getMessage());
             e.getCause();
         }
-        assert driver != null : "Драйвер " + browserName + " не создан";
+        assert driver != null : "Драйвер " + browser.toString() + " не создан";
         proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
         proxy.newHar();
         wait = new WebDriverWait(driver, 10);
-
+        return this;
     }
 
     public String getTitle() {
@@ -180,7 +199,7 @@ public class PhpTravels {
         proxy.abort();
         driver.quit();
 
-        logger.info(browserName + " закрыт");
+        logger.info(browser.toString() + " закрыт");
         return this;
     }
 
