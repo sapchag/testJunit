@@ -9,13 +9,14 @@
     </appender>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+
         <encoder>
             <pattern>%msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="info">
+    <root level="error">
         <appender-ref ref="FILE" />
-       <!-- <appender-ref ref="STDOUT" />-->
+       <appender-ref ref="STDOUT" />
     </root>
 </configuration>

@@ -5,6 +5,7 @@ import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
 import net.lightbody.bmp.core.har.HarEntry;
 import net.lightbody.bmp.proxy.CaptureType;
+import org.junit.jupiter.params.provider.Arguments;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -28,7 +29,7 @@ public class PhpTravels {
     private HashMap<String, String> params;
     private String url;
     private WebDriver driver;
-    String webDriverUrl = ParametersXml.getNodeValues("webdriver").get("url").toString();
+    String webDriverUrl = ParametersXml.getNodeValues("webdriver").get("url");
     BROWSER browser;
     WebDriverWait wait;
     BrowserMobProxyServer proxy;
@@ -38,14 +39,8 @@ public class PhpTravels {
     }
 
     public PhpTravels() {
-        ArrayList<BROWSER> browsers = new ArrayList<BROWSER>();
-
-        browsers.add(BROWSER.CHROME);
-        browsers.add(BROWSER.FIREFOX);
-        browsers.add(BROWSER.IE);
-        browsers.add(BROWSER.OPERA);
-        browsers.add(BROWSER.EDGE);
-
+        ArrayList<BROWSER> browsers = new ArrayList<>();
+        ParametersXml.getNodeValues("browsers").forEach((k, v) -> browsers.add(BROWSER.valueOf(k)));
         Collections.shuffle(browsers);
         setBrowser(browsers.get(0));
     }
@@ -61,8 +56,7 @@ public class PhpTravels {
         proxy.setHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
         proxy.enableHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
         proxy.start(0);
-        Proxy seleniumProxy = null;
-        seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
+        Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
         DesiredCapabilities capability = new DesiredCapabilities();
         this.browser = browser;
         switch (browser) {
@@ -89,15 +83,7 @@ public class PhpTravels {
         try {
 
             driver = new RemoteWebDriver(new URL(webDriverUrl), capability);
-        } catch (MalformedURLException e) {
-            logger.error(e.getMessage());
-            Allure.addAttachment("Ошибка", "text/plain", e.getMessage());
-            e.getCause();
-        } catch (UnreachableBrowserException e) {
-            logger.error(e.getMessage());
-            Allure.addAttachment("Ошибка", "text/plain", e.getMessage());
-            e.getCause();
-        } catch (SessionNotCreatedException e) {
+        } catch (MalformedURLException | UnreachableBrowserException | SessionNotCreatedException e) {
             logger.error(e.getMessage());
             Allure.addAttachment("Ошибка", "text/plain", e.getMessage());
             e.getCause();
@@ -134,7 +120,7 @@ public class PhpTravels {
         link();
 
         if (params.isEmpty()) return this;
-        params.forEach((k, v) -> driver.findElement(By.name(k.toString())).sendKeys(v.toString()));
+        params.forEach((k, v) -> driver.findElement(By.name(k)).sendKeys(v));
         driver.findElement(By.xpath("//form/button")).click();
         try {
             wait.until(ExpectedConditions
@@ -148,7 +134,7 @@ public class PhpTravels {
     }
 
     public List<String> getImageLinks() {
-        List<String> links = new ArrayList<String>();
+        List<String> links = new ArrayList<>();
 
         for (WebElement link : driver.findElements(By.tagName("img"))) {
             url = link.getAttribute("src");
@@ -158,7 +144,7 @@ public class PhpTravels {
     }
 
     public List<String> getAllLinks() {
-        List<String> links = new ArrayList<String>();
+        List<String> links = new ArrayList<>();
 
         for (WebElement link : driver.findElements(By.tagName("a"))) {
             url = link.getAttribute("href");
@@ -204,17 +190,20 @@ public class PhpTravels {
     }
 
     public String getProxyLogs() {
-        String logs = "";
+        StringBuilder logs = new StringBuilder();
         for (HarEntry entry : proxy.getHar().getLog().getEntries()) {
-            logs = logs + entry.getRequest().getUrl() + " " + entry.getResponse().getStatus() +
-                    " " + System.lineSeparator();
+            logs.append(entry.getRequest().getUrl())
+                    .append(" ")
+                    .append(entry.getResponse().getStatus())
+                    .append(" ")
+                    .append(System.lineSeparator());
         }
         proxy.endHar();
         proxy.newHar();
-        return logs;
+        return logs.toString();
     }
 
-    public PhpTravels setParams(HashMap params) {
+    public PhpTravels setParams(HashMap<String,String> params) {
         this.params = params;
         return this;
     }
