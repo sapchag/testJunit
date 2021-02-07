@@ -11,7 +11,7 @@ import spec.PhpTravels;
 @Epic("Link")
 @Feature("Доступность старницы")
 @Execution(ExecutionMode.CONCURRENT)
-public class LinkTo {
+public class TestLinkTo {
 
 
     @Issue("1")

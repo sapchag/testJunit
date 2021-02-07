@@ -11,12 +11,13 @@ import spec.ParametersXml;
 import spec.PhpTravelBuilder;
 import spec.PhpTravels;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
 @Epic("Language")
 @Feature("Смена языка на главной странице")
-public class LanguageCheck {
+public class TestLanguageCheck {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -30,7 +31,7 @@ public class LanguageCheck {
     }
 
     static Stream<Arguments> checkLanguageUser() {
-        ArrayList<Arguments> aList = new ArrayList<Arguments>();
+        ArrayList<Arguments> aList = new ArrayList<>();
         ParametersXml.getNodeValues("languages").forEach((k, v) -> aList.add(Arguments.of(k, v)));
         return aList.stream();
     }
@@ -64,7 +65,7 @@ public class LanguageCheck {
     }
 
     static Stream<Arguments> checkLanguageHome() {
-        ArrayList<Arguments> aList = new ArrayList<Arguments>();
+        ArrayList<Arguments> aList = new ArrayList<>();
         ParametersXml.getNodeValues("languages").forEach((k, v) -> aList.add(Arguments.of(k, v)));
         return aList.stream();
     }

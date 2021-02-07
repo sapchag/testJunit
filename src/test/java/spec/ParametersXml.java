@@ -12,6 +12,7 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -22,18 +23,18 @@ public class ParametersXml {
 
     public static HashMap<String, String> getNodeValues(String nodeName, String... attributeParams) {
 
-        HashMap<String, String> hMap = new HashMap<String, String>();
+        HashMap<String, String> hMap = new HashMap<>();
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLEventReader eventReader =
-                    factory.createXMLEventReader(new FileReader(path));
+                    factory.createXMLEventReader(new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8));
             StartElement startElement;
             String mapKeyValue = null;
             Attribute attribute;
             boolean nodeIsFound = false;
             while (eventReader.hasNext()) {
                 XMLEvent event = eventReader.nextEvent();
-                HashMap<String, String> attributesMap = new HashMap<String, String>();
+                HashMap<String, String> attributesMap = new HashMap<>();
                 switch (event.getEventType()) {
                     case XMLStreamConstants.START_ELEMENT:
                         startElement = event.asStartElement();
@@ -69,7 +70,7 @@ public class ParametersXml {
                         }
                         break;
                     case XMLStreamConstants.END_ELEMENT:
-                        if (event.asEndElement().getName().getLocalPart() == nodeName) {
+                        if (event.asEndElement().getName().getLocalPart().equals(nodeName)) {
                             nodeIsFound = false;
                         }
                 }
@@ -86,11 +87,11 @@ public class ParametersXml {
 
     public static String getTitle(String pageName) {
         return getNodeValues("page", pageName, "title")
-                .get("title").toString();
+                .get("title");
     }
 
     public static String getUrl(String pageName) {
         return getNodeValues("page", pageName, "url")
-                .get("url").toString();
+                .get("url");
     }
 }

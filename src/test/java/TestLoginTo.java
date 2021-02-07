@@ -8,7 +8,7 @@ import spec.PhpTravels;
 import java.util.HashMap;
 
 @Epic("Login")
-public class LoginTo {
+public class TestLoginTo {
 
     @Issue("5")
     @Feature("Вход на страницу")

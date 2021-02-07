@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 @Epic("Изображения")
 @Feature("Отсутвие битых изображений на странице")
-public class BrokenImageLinkCheck {
+public class TestBrokenImageLinkCheck {
 
     @Issue("18")
     @Story("Администратор")

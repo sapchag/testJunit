@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 @Epic("Ссылки")
 @Feature("Отстутствие ссылок, ведущих к одной странице")
-public class DoubleLinkCheck {
+public class TestDoubleLinkCheck {
 
     @Issue("15")
     @Story("Администратор")

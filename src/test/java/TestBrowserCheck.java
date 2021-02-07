@@ -12,7 +12,7 @@ import static spec.PhpTravels.BROWSER.*;
 @Epic("Browser")
 @Feature("Работа браузера")
 @Execution(ExecutionMode.CONCURRENT)
-public class BrowserCheck {
+public class TestBrowserCheck {
 
     @Issue("19")
     @Story("CHROME")

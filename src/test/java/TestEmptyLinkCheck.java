@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 @Epic("Ссылки")
 @Feature("Отсутствие неработающих ссылок на странице")
-public class EmptyLinkCheck {
+public class TestEmptyLinkCheck {
 
     @Issue("12")
     @Story("Администратор")
