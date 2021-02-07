@@ -28,10 +28,10 @@
         <url>http://localhost:4444/wd/hub</url>
     </webdriver>
     <browsers>
-        <CHROME>delete this tekst for disable browsers</CHROME>
-        <FIREFOX>delete this tekst for disable browsers</FIREFOX>
-        <IE>delete this tekst for disable browsers</IE>
-        <OPERA>delete this tekst for disable browsers</OPERA>
-        <EDGE>delete this tekst for disable browsers</EDGE>
+        <CHROME>delete this tekst for disable browser</CHROME>
+        <FIREFOX>delete this tekst for disable browser</FIREFOX>
+        <IE>delete this tekst for disable browser</IE>
+        <OPERA>delete this tekst for disable browser</OPERA>
+        <EDGE>delete this tekst for disable browser</EDGE>
     </browsers>
 </properties>
