@@ -1,9 +1,5 @@
 package spec;
 
-import net.lightbody.bmp.BrowserMobProxyServer;
-import net.lightbody.bmp.client.ClientUtil;
-import net.lightbody.bmp.core.har.HarEntry;
-import net.lightbody.bmp.proxy.CaptureType;
 import org.slf4j.Logger;
 
 import java.io.IOException;
