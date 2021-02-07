@@ -10,6 +10,15 @@ import java.util.HashMap;
 @Epic("Login")
 public class TestLoginTo {
 
+    @Issue("4")
+    @Feature("Вход на страницу")
+    @Story("Пользователь")
+    @Test
+    @DisplayName("Вход на старницу пользователя")
+    void logInToUser() {
+        logInTo("user", true);
+    }
+
     @Issue("5")
     @Feature("Вход на страницу")
     @Story("Администратор")
@@ -19,13 +28,13 @@ public class TestLoginTo {
         logInTo("admin", true);
     }
 
-    @Issue("4")
-    @Feature("Вход на страницу")
+    @Issue("6")
+    @Feature("Попытка входа на страницу")
     @Story("Пользователь")
     @Test
-    @DisplayName("Вход на старницу пользователя")
-    void logInToUser() {
-        logInTo("user", true);
+    @DisplayName("Попытка входа на старницу пользователя с неправильным паролем")
+    void logInToWrongUser() {
+        logInTo("user", false);
     }
 
     @Issue("7")
@@ -37,14 +46,6 @@ public class TestLoginTo {
         logInTo("admin", false);
     }
 
-    @Issue("6")
-    @Feature("Попытка входа на страницу")
-    @Story("Пользователь")
-    @Test
-    @DisplayName("Попытка входа на старницу пользователя с неправильным паролем")
-    void logInToWrongUser() {
-        logInTo("user", false);
-    }
 
     void logInTo(String pageType, boolean login) {
 

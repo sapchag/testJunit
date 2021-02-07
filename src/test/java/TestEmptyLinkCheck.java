@@ -15,22 +15,11 @@ import java.util.stream.Stream;
 @Feature("Отсутствие неработающих ссылок на странице")
 public class TestEmptyLinkCheck {
 
-    @Issue("12")
-    @Story("Администратор")
-    @ParameterizedTest(name = "{0}")
-    @MethodSource
-    @DisplayName("Отсутствие неработающих ссылок на странице администратора")
-    void checkLinkAdmin(String url) {
-        UrlChecks urlChecks = new UrlChecks(url);
-        Allure.addAttachment("Траффик", "text/plain", urlChecks.getProxyLogs());
-        Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
-    }
-
     @Issue("10")
     @Story("Домашняя")
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Отсутствие неработающих ссылок на главной странице")
+    @DisplayName("Отсутствие неработающих ссылок на домашней странице")
     void checkLinkHome(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
         Allure.addAttachment("Траффик", "text/plain", urlChecks.getProxyLogs());
@@ -43,6 +32,17 @@ public class TestEmptyLinkCheck {
     @MethodSource
     @DisplayName("Отсутствие неработающих ссылок на странице пользователя")
     void checkLinkUser(String url) {
+        UrlChecks urlChecks = new UrlChecks(url);
+        Allure.addAttachment("Траффик", "text/plain", urlChecks.getProxyLogs());
+        Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
+    }
+
+    @Issue("12")
+    @Story("Администратор")
+    @ParameterizedTest(name = "{0}")
+    @MethodSource
+    @DisplayName("Отсутствие неработающих ссылок на странице администратора")
+    void checkLinkAdmin(String url) {
         UrlChecks urlChecks = new UrlChecks(url);
         Allure.addAttachment("Траффик", "text/plain", urlChecks.getProxyLogs());
         Assert.assertTrue(urlChecks.getMessage(), urlChecks.isCheckOk());
