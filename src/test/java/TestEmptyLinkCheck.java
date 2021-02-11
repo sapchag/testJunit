@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import spec.ParametersXml;
-import spec.PhpTravelBuilder;
 import spec.PhpTravels;
 import spec.UrlChecks;
 
@@ -61,7 +60,7 @@ public class TestEmptyLinkCheck {
     }
 
     static Stream<String> checkLink(String pageType) {
-        PhpTravels phpTravels = PhpTravelBuilder.createLoginedPhpTravelsPage(pageType);
+        PhpTravels phpTravels = PhpTravels.createLoginedPhpTravelsPage(pageType);
 
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();

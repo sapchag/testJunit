@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Класс для работы с сайтом
+ */
 public class PhpTravels {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -41,23 +44,56 @@ public class PhpTravels {
         ArrayList<BROWSER> browsers = new ArrayList<>();
         ParametersXml.getNodeValues("browsers").forEach((k, v) -> browsers.add(BROWSER.valueOf(k)));
         Collections.shuffle(browsers);
-        setBrowser(browsers.get(0));
+        browser = browsers.get(0);
+        startProxyAndDriver();
     }
 
     public PhpTravels(BROWSER browser) {
-        setBrowser(browser);
+        this.browser = browser;
+        startProxyAndDriver();
     }
 
-    public PhpTravels setBrowser(BROWSER browser) {
-        logger.info("Выбор и запуск браузера");
-
+    /**
+     * Запускает прокси и браузер
+     * @return
+     */
+    public PhpTravels startProxyAndDriver() {
         proxy = new BrowserMobProxyServer();
         proxy.setHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
         proxy.enableHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
         proxy.start(0);
+
+        createWebDriver();
+        assert driver != null : "Драйвер " + browser.toString() + " не создан";
+
+        proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
+        proxy.newHar();
+        wait = new WebDriverWait(driver, 10);
+        return this;
+    }
+
+    /**
+     * Создает веб драйвер
+     */
+    void createWebDriver(){
+        DesiredCapabilities capability = createBrowserCapabilities();
+        logger.info("Запуск браузера " + browser.toString());
+        try {
+            driver = new RemoteWebDriver(new URL(webDriverUrl), capability);
+        } catch (MalformedURLException | UnreachableBrowserException | SessionNotCreatedException e) {
+            logger.error(e.getMessage());
+            Allure.addAttachment("Ошибка", "text/plain", e.getMessage());
+            e.getCause();
+        }
+    }
+
+    /**
+     * Создает Capabilities в зависимости от выбранного типа браузера
+     * @return
+     */
+    DesiredCapabilities createBrowserCapabilities() {
         Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
         DesiredCapabilities capability = new DesiredCapabilities();
-        this.browser = browser;
         switch (browser) {
             case CHROME:
                 capability = DesiredCapabilities.chrome();
@@ -74,24 +110,10 @@ public class PhpTravels {
             case EDGE:
                 capability = DesiredCapabilities.edge();
         }
-
-        logger.info(browser.toString());
         capability.setCapability(CapabilityType.PROXY, seleniumProxy);
         capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
         capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, false);
-        try {
-
-            driver = new RemoteWebDriver(new URL(webDriverUrl), capability);
-        } catch (MalformedURLException | UnreachableBrowserException | SessionNotCreatedException e) {
-            logger.error(e.getMessage());
-            Allure.addAttachment("Ошибка", "text/plain", e.getMessage());
-            e.getCause();
-        }
-        assert driver != null : "Драйвер " + browser.toString() + " не создан";
-        proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
-        proxy.newHar();
-        wait = new WebDriverWait(driver, 10);
-        return this;
+        return capability;
     }
 
     public String getTitle() {
@@ -202,7 +224,7 @@ public class PhpTravels {
         return logs.toString();
     }
 
-    public PhpTravels setParams(HashMap<String,String> params) {
+    public PhpTravels setParams(HashMap<String, String> params) {
         this.params = params;
         return this;
     }
@@ -210,5 +232,20 @@ public class PhpTravels {
     public PhpTravels setUrl(String url) {
         this.url = url;
         return this;
+    }
+
+    public static PhpTravels createLoginedPhpTravelsPage(String pageType) {
+        PhpTravels phpTravels = new PhpTravels()
+                .setUrl(ParametersXml.getUrl(pageType))
+                .setParams(ParametersXml.getPageParameters(pageType))
+                .login();
+        return phpTravels;
+    }
+
+    public static PhpTravels createPhpTravelsPage(String pageType) {
+        PhpTravels phpTravels = new PhpTravels()
+                .setUrl(ParametersXml.getUrl(pageType))
+                .link();
+        return phpTravels;
     }
 }

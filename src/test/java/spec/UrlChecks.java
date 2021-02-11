@@ -11,6 +11,9 @@ import java.net.URL;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Класс для проверки доступности ссылок URL и адресов email
+ */
 public class UrlChecks {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -28,6 +31,10 @@ public class UrlChecks {
         }
     }
 
+    /**
+     * Проверка синтаксиса сслыки URL
+     * @return boolean
+     */
     boolean isValidUrl() {
         try {
             new URL(url).toURI();
@@ -39,8 +46,12 @@ public class UrlChecks {
         return false;
     }
 
+    /**
+     * Отправлеят заголовок HTTP запроса и анализирует ответ
+     * результат анализа пишет в checkOk
+     * ошибки или неподходящие ответы пишет в message
+     */
     public void checkResponse() {
-        boolean result = true;
         HttpURLConnection huc = null;
         int respCode = 200;
 
@@ -59,7 +70,6 @@ public class UrlChecks {
             if (e.getMessage().contains("MailToURLConnection")) {
                 checkOk = isValidEmail(url.replace("mailto:", ""));
                 message = "email";
-                proxyLogs = message;
             } else {
                 message = e.getMessage();
                 logger.error(message);
@@ -69,6 +79,9 @@ public class UrlChecks {
         proxyLogs = url + " " + respCode;
     }
 
+    /**
+     * Проверка доступности email адреса
+     */
     public boolean isValidEmail(String email) {
 
         EmailValidator validator = EmailValidator.getInstance();

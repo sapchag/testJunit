@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spec.ParametersXml;
-import spec.PhpTravelBuilder;
 import spec.PhpTravels;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class TestLanguageCheck {
 
     void checkLanguage(String pageType, String alias, String control) {
 
-        PhpTravels phpTravels = PhpTravelBuilder.createLoginedPhpTravelsPage(pageType);
+        PhpTravels phpTravels = PhpTravels.createLoginedPhpTravelsPage(pageType);
         String url = phpTravels.getCurrentUrl();
         String title = phpTravels.getTitle();
         String loginLog = phpTravels.getProxyLogs();

@@ -19,7 +19,6 @@ import java.util.Iterator;
 public class ParametersXml {
 
     static final String path = "src/main/resources/PhpTravelConfig.xml";
-    static final Logger logger = LoggerFactory.getLogger(ParametersXml.class);
 
     public static HashMap<String, String> getNodeValues(String nodeName, String... attributeParams) {
 

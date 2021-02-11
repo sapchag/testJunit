@@ -5,7 +5,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import spec.ParametersXml;
-import spec.PhpTravelBuilder;
 import spec.PhpTravels;
 
 import java.util.List;
@@ -58,7 +57,7 @@ public class TestDoubleLinkCheck {
     }
 
     static Stream<Arguments> checkLink(String pageType) {
-        PhpTravels phpTravels = PhpTravelBuilder.createLoginedPhpTravelsPage(pageType);
+        PhpTravels phpTravels = PhpTravels.createLoginedPhpTravelsPage(pageType);
 
         String title = phpTravels.getTitle();
         String url = phpTravels.getCurrentUrl();

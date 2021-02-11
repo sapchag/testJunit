@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import spec.ParametersXml;
-import spec.PhpTravelBuilder;
 import spec.PhpTravels;
 
 @Epic("Link")
@@ -39,7 +38,7 @@ public class TestLinkTo {
     }
 
     static String linkTo(String pageType) {
-        PhpTravels phpTravels = PhpTravelBuilder.createPhpTravelsPage(pageType);
+        PhpTravels phpTravels = PhpTravels.createPhpTravelsPage(pageType);
         String title = phpTravels.getTitle();
         Allure.addAttachment("Траффик", "text/plain", phpTravels.getProxyLogs());
         phpTravels.close();
