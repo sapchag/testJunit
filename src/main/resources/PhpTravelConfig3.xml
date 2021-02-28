@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <pages>test
+        <page name="home" title="PHPTRAVELS | Travel Technology Partner" url="https://www.phptravels.net/home"/>
+        <page name="user" title="My Account" url="https://www.phptravels.net/login">
+        </page>
+        <page name="admin" title="Dashboard" url="https://www.phptravels.net/admin">
+        </page>
+        <page name="nologinuser" title="Login"/>
+        <page name="nologinadmin" title="Administator Login"/>
+    </pages>

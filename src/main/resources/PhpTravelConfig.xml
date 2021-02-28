@@ -1,37 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<properties>
-    <pages>
-        <page name="home" title="PHPTRAVELS | Travel Technology Partner" url="https://www.phptravels.net/home"/>
-        <page name="user" title="My Account" url="https://www.phptravels.net/login">
-            <username>user@phptravels.com</username>
-            <password>demouser</password>
-        </page>
-        <page name="admin" title="Dashboard" url="https://www.phptravels.net/admin">
-            <email>admin@phptravels.com</email>
-            <password>demoadmin</password>
-        </page>
-        <page name="nologinuser" title="Login"/>
-        <page name="nologinadmin" title="Administator Login"/>
-    </pages>
-    <languages>
-        <ar>اشتراك مورد</ar>
-        <fa>ثبت نام کننده</fa>
-        <tr>Tedarikçi Kayıt Olun</tr>
-        <fr>Signature du fournisseur</fr>
-        <es>Registro de proveedores</es>
-        <de>Unterschrift des Lieferanten</de>
-        <vi>Đăng ký nhà cung cấp</vi>
-        <ru>Подпись поставщика</ru>
-        <en>Supplier Sign Up</en>
-    </languages>
-    <webdriver>
-        <url>http://localhost:4444/wd/hub</url>
-    </webdriver>
-    <browsers>
-        <CHROME>delete this tekst for disable browser</CHROME>
-        <FIREFOX>delete this tekst for disable browser</FIREFOX>
-        <IE>delete this tekst for disable browser</IE>
-        <OPERA>delete this tekst for disable browser</OPERA>
-        <EDGE>delete this tekst for disable browser</EDGE>
-    </browsers>
-</properties>
+<pages>test
+    <page name="home" title="PHPTRAVELS | Travel Technology Partner" url="https://www.phptravels.net/home"/>
+    <page name="user" title="My Account" url="https://www.phptravels.net/login">
+    </page>
+    <page name="admin" title="Dashboard" url="https://www.phptravels.net/admin">
+    </page>
+    <page name="nologinuser" title="Login"/>
+    <page name="nologinadmin" title="Administator Login"/>
+</pages>
