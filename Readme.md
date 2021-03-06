@@ -25,17 +25,17 @@
 1) Установить CHROME, FIREFOX, IE, OPERA, EDGE на компьютер (либо исключить в настройках теста) 
         
     Для исключения браузера(ов) из теста, нужно в файле PhpTravelConfig.xml,
-    в ветке <browsers> достаточно сделать узел соответствующего браузера пустым.    
+    в ветке <browsers> достаточно оставить узел соответствующего браузера пустым.
 
     Пример PhpTravelConfig.xml
     ...
-        <browsers>
-            <CHROME>delete this tekst for disable browser</CHROME>
-            <FIREFOX>delete this tekst for disable browser</FIREFOX>
-            <IE></IE> 
-            <OPERA>delete this tekst for disable browser</OPERA>
-            <EDGE></EDGE>
-        </browsers>
+   <browsers>
+   <CHROME>delete this tekst for disable browser</CHROME>
+   <FIREFOX>delete this tekst for disable browser</FIREFOX>
+   <IE></IE>
+   <OPERA>delete this tekst for disable browser</OPERA>
+   <EDGE></EDGE>
+   </browsers>
     ...           
         
         
