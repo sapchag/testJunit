@@ -30,7 +30,7 @@
     <browsers>
         <CHROME>delete this tekst for disable browser</CHROME>
         <FIREFOX>delete this tekst for disable browser</FIREFOX>
-        <IE></IE>
+        <IE>delete this tekst for disable browser</IE>
         <OPERA>delete this tekst for disable browser</OPERA>
         <EDGE>delete this tekst for disable browser</EDGE>
     </browsers>
