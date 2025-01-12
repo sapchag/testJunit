@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
     <pages>
-        <page name="home" title="PHPTRAVELS | Travel Technology Partner" url="https://www.phptravels.net/home"/>
-        <page name="user" title="My Account" url="https://www.phptravels.net/login">
-            <username>user@phptravels.com</username>
+        <page name="home" title="PHPTRAVELS" url="https://www.phptravels.net"/>
+        <page name="user" title="Dashboard" url="https://www.phptravels.net/login">
+            <email>user@phptravels.com</email>
             <password>demouser</password>
         </page>
         <page name="admin" title="Dashboard" url="https://www.phptravels.net/admin">
@@ -11,7 +11,7 @@
             <password>demoadmin</password>
         </page>
         <page name="nologinuser" title="Login"/>
-        <page name="nologinadmin" title="Administator Login"/>
+        <page name="nologinadmin" title="Administrators Login"/>
     </pages>
     <languages>
         <ar>اشتراك مورد</ar>
@@ -30,8 +30,8 @@
     <browsers>
         <CHROME>delete this tekst for disable browser</CHROME>
         <FIREFOX>delete this tekst for disable browser</FIREFOX>
-        <IE>delete this tekst for disable browser</IE>
-        <OPERA>delete this tekst for disable browser</OPERA>
+        <IE></IE>
+        <OPERA></OPERA>
         <EDGE>delete this tekst for disable browser</EDGE>
     </browsers>
 </properties>

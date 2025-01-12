@@ -34,7 +34,7 @@ public class PhpTravels {
     String webDriverUrl = ParametersXml.getNodeValues("webdriver").get("url");
     BROWSER browser;
     WebDriverWait wait;
-    BrowserMobProxyServer proxy;
+//    BrowserMobProxyServer proxy;
 
     public enum BROWSER {
         CHROME, FIREFOX, OPERA, IE, EDGE
@@ -58,16 +58,16 @@ public class PhpTravels {
      * @return
      */
     public PhpTravels startProxyAndDriver() {
-        proxy = new BrowserMobProxyServer();
-        proxy.setHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
-        proxy.enableHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
-        proxy.start(0);
+//        proxy = new BrowserMobProxyServer();
+//        proxy.setHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
+//        proxy.enableHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
+//        proxy.start(0);
 
         createWebDriver();
         assert driver != null : "Драйвер " + browser.toString() + " не создан";
 
-        proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
-        proxy.newHar();
+//        proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
+//        proxy.newHar();
         wait = new WebDriverWait(driver, 10);
         return this;
     }
@@ -92,7 +92,7 @@ public class PhpTravels {
      * @return
      */
     DesiredCapabilities createBrowserCapabilities() {
-        Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
+        //Proxy seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
         DesiredCapabilities capability = new DesiredCapabilities();
         switch (browser) {
             case CHROME:
@@ -110,7 +110,7 @@ public class PhpTravels {
             case EDGE:
                 capability = DesiredCapabilities.edge();
         }
-        capability.setCapability(CapabilityType.PROXY, seleniumProxy);
+        //capability.setCapability(CapabilityType.PROXY, seleniumProxy);
         capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
         capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, false);
         return capability;
@@ -142,7 +142,7 @@ public class PhpTravels {
 
         if (params.isEmpty()) return this;
         params.forEach((k, v) -> driver.findElement(By.name(k)).sendKeys(v));
-        driver.findElement(By.xpath("//form/button")).click();
+        driver.findElement(By.xpath("//button[starts-with(@id,'submit')]")).click();
         try {
             wait.until(ExpectedConditions
                     .presenceOfElementLocated(By.xpath("//*[contains(text(),'Logout')]")));
@@ -202,8 +202,8 @@ public class PhpTravels {
     }
 
     public PhpTravels close() {
-        proxy.endHar();
-        proxy.abort();
+        //proxy.endHar();
+        //proxy.abort();
         driver.quit();
 
         logger.info(browser.toString() + " закрыт");
@@ -212,16 +212,17 @@ public class PhpTravels {
 
     public String getProxyLogs() {
         StringBuilder logs = new StringBuilder();
-        for (HarEntry entry : proxy.getHar().getLog().getEntries()) {
-            logs.append(entry.getRequest().getUrl())
-                    .append(" ")
-                    .append(entry.getResponse().getStatus())
-                    .append(" ")
-                    .append(System.lineSeparator());
-        }
-        proxy.endHar();
-        proxy.newHar();
-        return logs.toString();
+//        for (HarEntry entry : proxy.getHar().getLog().getEntries()) {
+//            logs.append(entry.getRequest().getUrl())
+//                    .append(" ")
+//                    .append(entry.getResponse().getStatus())
+//                    .append(" ")
+//                    .append(System.lineSeparator());
+//        }
+//        proxy.endHar();
+//        proxy.newHar();
+//        return logs.toString();
+        return "";
     }
 
     public PhpTravels setParams(HashMap<String, String> params) {

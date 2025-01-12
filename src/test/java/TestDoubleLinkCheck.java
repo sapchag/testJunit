@@ -30,7 +30,7 @@ public class TestDoubleLinkCheck {
     @Story("Пользователь")
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Отстутствие дублирующих ссылок на главной странице")
+    @DisplayName("Отстутствие дублирующих ссылок на странице пользователя")
     void checkLinkUser(String url, long count) {
         Assert.assertEquals(url, 1, count);
     }
@@ -39,7 +39,7 @@ public class TestDoubleLinkCheck {
     @Story("Домашняя")
     @ParameterizedTest(name = "{0}")
     @MethodSource
-    @DisplayName("Отстутствие дублирующих ссылок на странице пользователя")
+    @DisplayName("Отстутствие дублирующих ссылок на главной странице")
     void checkLinkHome(String url, long count) {
         Assert.assertEquals(url, 1, count);
     }

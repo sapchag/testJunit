@@ -97,6 +97,7 @@ public class UrlChecks {
     }
 
     public String getProxyLogs() {
-        return proxyLogs;
+        //return proxyLogs;
+        return " ";
     }
 }
